@@ -1,10 +1,12 @@
 package com.fleetmatics.networkingworkapp.network;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.fleetmatics.networkingworkapp.model.ResponseSearch;
 import com.fleetmatics.networkmanager.model.NetworkRequest;
 import com.fleetmatics.networkmanager.model.NetworkRequestExecutor;
+import com.fleetmatics.networkmanager.model.NetworkRequestStatus;
 import com.fleetmatics.networkmanager.network.NetworkApi;
 
 import retrofit2.Response;
@@ -15,6 +17,8 @@ import rx.Observable;
  */
 public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APIService> {
 
+
+    private static final String TAG = SearchExecutor.class.getSimpleName();
 
     public static NetworkRequest createRequest(String search, int page) {
         NetworkRequest request = new NetworkRequest();
@@ -37,5 +41,10 @@ public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APISe
     @Override
     public String getExecutableType() {
         return "GET_SEARCH";
+    }
+
+    @Override
+    public void newStatusWithoutObserver(NetworkRequest request, NetworkRequestStatus status) {
+        Log.d(TAG, "newStatusWithoutObserver() called with: " + "request = [" + request + "], status = [" + status + "]");
     }
 }

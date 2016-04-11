@@ -25,4 +25,6 @@ public abstract class NetworkRequestExecutor<T, API> {
     public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkApi<API> networkApi, @NonNull NetworkRequest request);
 
     public abstract String getExecutableType();
+
+    public abstract void newStatusWithoutObserver(NetworkRequest request, NetworkRequestStatus status);
 }

@@ -56,8 +56,8 @@ public class NetworkRequestService extends BaseIntentService {
         // execute network requests not already started or waiting for connection
         if (isConnectionAvailable) {
             for (NetworkRequest request : NetworkRequestManager.getInstance().getRequestsStore().getAll()) {
-                if (!NetworkRequestManager.getInstance().contains(request.hashCode())
-                        || NetworkRequestManager.getInstance().isWaitingConnection(hashCode())
+                if (!NetworkRequestManager.Tools.contains(request.hashCode())
+                        || NetworkRequestManager.Tools.isWaitingConnection(hashCode())
                         )
                     executeRequest(request);
             }
@@ -67,30 +67,29 @@ public class NetworkRequestService extends BaseIntentService {
     @ServiceAction
     void executeRequest(final NetworkRequest request) {
         logD("executeRequest() called with: " + "request = [" + request + "]");
-        NetworkRequestManager requestManager = NetworkRequestManager.getInstance();
 
         if (isConnectionAvailable) {
-            NetworkRequestExecutor executor = NetworkRequestManager.getInstance().getExecutor(request);
+            NetworkRequestExecutor executor = NetworkRequestManager.Tools.getExecutor(request);
 
             rx.Observable<Response> observable = executor.createNetworkRequestObservable((NetworkApi<DialogInterface.OnClickListener>) NetworkApi.getInstance(), request);
 
-            requestManager.notifyRequestStatusOnGoing(request.hashCode());
+            NetworkRequestManager.Notify.notifyRequestStatusOnGoing(request.hashCode());
             observable
                     .subscribe(
                             response -> {
 
                                 if (response.isSuccessful()) {
-                                    requestManager
+                                    NetworkRequestManager.Notify
                                             .notifyRequestStatusSuccess(request.hashCode(), response.body());
                                 } else
-                                    requestManager.notifyRequestStatusError(request.hashCode(), response.errorBody(), false);
+                                    NetworkRequestManager.Notify.notifyRequestStatusError(request.hashCode(), response.errorBody(), false);
                             },
                             throwable -> {
-                                requestManager.notifyRequestStatusError(request.hashCode(), throwable.getMessage(), true);
+                                NetworkRequestManager.Notify.notifyRequestStatusError(request.hashCode(), throwable.getMessage(), true);
                             }
                     );
         } else
-            requestManager.notifyRequestStatusWaitingConnection(request.hashCode());
+            NetworkRequestManager.Notify.notifyRequestStatusWaitingConnection(request.hashCode());
 
 
     }

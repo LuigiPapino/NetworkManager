@@ -24,6 +24,7 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by luigi.papino on 06/04/16.
  */
+//TODO retry policy
 public class NetworkRequestManager {
 
     private static final String TAG = NetworkRequestManager.class.getSimpleName();
@@ -64,17 +65,7 @@ public class NetworkRequestManager {
         return requestsStore;
     }
 
-    public boolean contains(int hashCode) {
-        return requestsMap.containsKey(hashCode);
-    }
 
-    public boolean isWaitingConnection(int hashCode) {
-
-        if (requestsMap.containsKey(hashCode) && requestsMap.get(hashCode).hasValue()) {
-            return requestsMap.get(hashCode).getValue().isWaitingConnection();
-        } else
-            return false;
-    }
 
     public <T> Observable<NetworkRequestStatus<T>> executeRequest(@NonNull NetworkRequest request, Class<T> _class) {
         if (!requestsMap.containsKey(request.hashCode()))
@@ -91,38 +82,7 @@ public class NetworkRequestManager {
         return subject.asObservable();
     }
 
-    public <T> void notifyRequestStatusSuccess(int hashcode, T data) {
-        notifyRequestStatus(hashcode, NetworkRequestStatus.completed(data));
-    }
 
-    public void notifyRequestStatusError(int hashcode, @NonNull String message, boolean isErrorOther) {
-        notifyRequestStatus(hashcode, NetworkRequestStatus.error(message, isErrorOther));
-    }
-
-    public void notifyRequestStatusError(int hashcode, ResponseBody body, boolean isErrorOther) {
-        String message = "";
-        try {
-            message = body.string();
-            JSONObject jsonObject = new JSONObject(message);
-            message = jsonObject.optString("message");
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        } finally {
-
-            notifyRequestStatus(hashcode, NetworkRequestStatus.error(message, isErrorOther));
-        }
-        //ResponseGeneric from server, don't need to retry
-        //if (!isErrorOther)
-        //requestsStore.delete(hashcode);
-    }
-
-    public void notifyRequestStatusOnGoing(int hashcode) {
-        notifyRequestStatus(hashcode, NetworkRequestStatus.ongoing());
-    }
-
-    public void notifyRequestStatusWaitingConnection(int hashcode) {
-        notifyRequestStatus(hashcode, NetworkRequestStatus.waitingConnection());
-    }
 
     public void notifyRequestStatus(int hashcode, NetworkRequestStatus status) {
         Utility.logD(TAG, "notifyRequestStatus() called with: " + "hashcode = [" + hashcode + "], status = [" + status + "]");
@@ -133,6 +93,9 @@ public class NetworkRequestManager {
 
             if (!subject.hasObservers()) {
                 //TODO maybe a notification?
+                Tools.getExecutor(requestsStore.get(hashcode)).newStatusWithoutObserver(request, status);
+
+
                 Utility.logD(TAG, String.format("NetworkRequest %s has not observer", request != null ? request.getUri() : hashcode));
             }
 
@@ -152,12 +115,71 @@ public class NetworkRequestManager {
 
     }
 
-    @NonNull
-    public NetworkRequestExecutor getExecutor(@NonNull NetworkRequest request) {
-        NetworkRequestExecutor executor = executorMap.get(request.getType());
-        if (executor == null)
-            throw new UnsupportedOperationException(String.format("NetworkRequest with type %s doesn't have an executor. Did you forgot to add it?", request.getType()));
 
-        return executor;
+    public static class Notify {
+        public static <T> void notifyRequestStatusSuccess(int hashcode, T data) {
+            getInstance().notifyRequestStatus(hashcode, NetworkRequestStatus.completed(data));
+        }
+
+        public static void notifyRequestStatusError(int hashcode, @NonNull String message, boolean isErrorOther) {
+            getInstance().notifyRequestStatus(hashcode, NetworkRequestStatus.error(message, isErrorOther));
+        }
+
+        public static void notifyRequestStatusError(int hashcode, ResponseBody body, boolean isErrorOther) {
+            String message = "";
+            try {
+                message = body.string();
+                JSONObject jsonObject = new JSONObject(message);
+                message = jsonObject.optString("message");
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            } finally {
+
+                getInstance().notifyRequestStatus(hashcode, NetworkRequestStatus.error(message, isErrorOther));
+            }
+            //ResponseGeneric from server, don't need to retry
+            //if (!isErrorOther)
+            //requestsStore.delete(hashcode);
+        }
+
+        public static void notifyRequestStatusOnGoing(int hashcode) {
+            getInstance().notifyRequestStatus(hashcode, NetworkRequestStatus.ongoing());
+        }
+
+        public static void notifyRequestStatusWaitingConnection(int hashcode) {
+            getInstance().notifyRequestStatus(hashcode, NetworkRequestStatus.waitingConnection());
+        }
+    }
+
+
+    public static class Tools {
+
+        /**
+         * @param hashCode Network Request hashCode
+         * @return
+         */
+        public static boolean contains(int hashCode) {
+            return getInstance().requestsMap.containsKey(hashCode);
+        }
+
+        /**
+         * @param hashCode Network Request hashCode
+         * @return
+         */
+        public static boolean isWaitingConnection(int hashCode) {
+
+            if (getInstance().requestsMap.containsKey(hashCode) && getInstance().requestsMap.get(hashCode).hasValue()) {
+                return getInstance().requestsMap.get(hashCode).getValue().isWaitingConnection();
+            } else
+                return false;
+        }
+
+        @NonNull
+        public static NetworkRequestExecutor getExecutor(@NonNull NetworkRequest request) {
+            NetworkRequestExecutor executor = getInstance().executorMap.get(request.getType());
+            if (executor == null)
+                throw new UnsupportedOperationException(String.format("NetworkRequest with type %s doesn't have an executor. Did you forgot to add it?", request.getType()));
+            return executor;
+        }
     }
 }

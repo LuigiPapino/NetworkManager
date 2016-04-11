@@ -27,13 +27,37 @@ import rx.subjects.BehaviorSubject;
 public class NetworkRequestManager {
 
     private static final String TAG = NetworkRequestManager.class.getSimpleName();
+    private static NetworkRequestManager instance;
     private final NetworkRequestsStore requestsStore;
     private Context context;
     private HashMap<Integer, BehaviorSubject<NetworkRequestStatus>> requestsMap = new HashMap<>();
+    private Map<String, NetworkRequestExecutor> executorMap = new HashMap<>();
 
     private NetworkRequestManager(@NonNull Context context, @NonNull NetworkRequestsStore requestsStore) {
         this.context = context;
         this.requestsStore = requestsStore;
+    }
+
+    @NonNull
+    public static NetworkRequestManager getInstance() {
+        if (instance == null)
+            throw new IllegalStateException("You need to init the manager before to access it");
+
+        return instance;
+    }
+
+    @NonNull
+    public static NetworkRequestManager init(@NonNull Context context, @NonNull String basePath, @NonNull Class apiClass) {
+        if (context == null)
+            throw new IllegalArgumentException("application can't be null");
+
+        if (instance == null) {
+            NetworkRequestsStoreFromProvider networkRequestsStore = new NetworkRequestsStoreFromProvider(context.getApplicationContext());
+            instance = new NetworkRequestManager(context.getApplicationContext(), networkRequestsStore);
+            NetworkApi.init(context.getApplicationContext(), basePath, apiClass);
+        }
+        return instance;
+
     }
 
     public NetworkRequestsStore getRequestsStore() {
@@ -46,10 +70,9 @@ public class NetworkRequestManager {
 
     public boolean isWaitingConnection(int hashCode) {
 
-        if ( requestsMap.containsKey(hashCode) && requestsMap.get(hashCode).hasValue()){
+        if (requestsMap.containsKey(hashCode) && requestsMap.get(hashCode).hasValue()) {
             return requestsMap.get(hashCode).getValue().isWaitingConnection();
-        }
-        else
+        } else
             return false;
     }
 
@@ -90,7 +113,7 @@ public class NetworkRequestManager {
         }
         //ResponseGeneric from server, don't need to retry
         //if (!isErrorOther)
-            //requestsStore.delete(hashcode);
+        //requestsStore.delete(hashcode);
     }
 
     public void notifyRequestStatusOnGoing(int hashcode) {
@@ -100,6 +123,7 @@ public class NetworkRequestManager {
     public void notifyRequestStatusWaitingConnection(int hashcode) {
         notifyRequestStatus(hashcode, NetworkRequestStatus.waitingConnection());
     }
+
     public void notifyRequestStatus(int hashcode, NetworkRequestStatus status) {
         Utility.logD(TAG, "notifyRequestStatus() called with: " + "hashcode = [" + hashcode + "], status = [" + status + "]");
         if (requestsMap.containsKey(hashcode)) {
@@ -117,32 +141,6 @@ public class NetworkRequestManager {
             }
         }
     }
-
-    @NonNull
-    public static NetworkRequestManager getInstance() {
-        if (instance == null)
-            throw new IllegalStateException("You need to init the manager before to access it");
-
-        return instance;
-    }
-
-    private static NetworkRequestManager instance;
-
-    @NonNull
-    public static NetworkRequestManager init(@NonNull Context context, @NonNull String basePath, @NonNull Class apiClass) {
-        if (context == null)
-            throw new IllegalArgumentException("application can't be null");
-
-        if (instance == null) {
-            NetworkRequestsStoreFromProvider networkRequestsStore = new NetworkRequestsStoreFromProvider(context.getApplicationContext());
-            instance = new NetworkRequestManager(context.getApplicationContext(), networkRequestsStore);
-            NetworkApi.init(context.getApplicationContext(), basePath, apiClass);
-        }
-        return instance;
-
-    }
-
-    private Map<String, NetworkRequestExecutor> executorMap = new HashMap<>();
 
     public void addNetworkRequestExecutor(@NonNull NetworkRequestExecutor executor) {
         if (executor == null)

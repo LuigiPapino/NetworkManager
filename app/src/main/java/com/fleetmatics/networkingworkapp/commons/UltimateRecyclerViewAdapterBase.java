@@ -14,9 +14,9 @@ import java.util.List;
  */
 public abstract class UltimateRecyclerViewAdapterBase<T, V extends View> extends UltimateViewAdapter<ViewWrapper<View>> {
 
-    public List<T> items = new ArrayList<T>();
     protected static final int TYPE_ITEM = 0;
     protected static final int TYPE_HEADER = 1;
+    public List<T> items = new ArrayList<T>();
 
     public boolean isEmpty() {
         return items != null && items.size() == 0;
@@ -35,7 +35,7 @@ public abstract class UltimateRecyclerViewAdapterBase<T, V extends View> extends
     @Override
     public ViewWrapper<View> getViewHolder(View view) {
 
-            return new ViewWrapper<View>(view);
+        return new ViewWrapper<View>(view);
 
     }
 

@@ -8,7 +8,6 @@ import android.util.Log;
 import com.fleetmatics.networkmanager.BuildConfig;
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 
-
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;

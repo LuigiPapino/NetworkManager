@@ -3,6 +3,7 @@ package com.fleetmatics.networkingworkapp.model;
 /**
  * Created by luigi.papino on 08/04/16.
  */
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,15 +13,22 @@ import com.google.gson.annotations.SerializedName;
 
 
 @JsonObject
-public class Search implements Parcelable{
+public class Search implements Parcelable {
 
+    public static final Creator<Search> CREATOR = new Creator<Search>() {
+        public Search createFromParcel(Parcel in) {
+            return new Search(in);
+        }
+
+        public Search[] newArray(int size) {
+            return new Search[size];
+        }
+    };
     private static final String FIELD_YEAR = "Year";
     private static final String FIELD_POSTER = "Poster";
     private static final String FIELD_TITLE = "Title";
     private static final String FIELD_IMDB_ID = "imdbID";
     private static final String FIELD_TYPE = "Type";
-
-
     @SerializedName(FIELD_YEAR)
     @JsonField(name = FIELD_YEAR)
     private int mYear;
@@ -37,49 +45,8 @@ public class Search implements Parcelable{
     @JsonField(name = FIELD_TYPE)
     private String mType;
 
+    public Search() {
 
-    public Search(){
-
-    }
-
-    public void setYear(int year) {
-        mYear = year;
-    }
-
-    public int getYear() {
-        return mYear;
-    }
-
-    public void setPoster(String poster) {
-        mPoster = poster;
-    }
-
-    public String getPoster() {
-        return mPoster;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public void setImdbID(String imdbID) {
-        mImdbID = imdbID;
-    }
-
-    public String getImdbID() {
-        return mImdbID;
-    }
-
-    public void setType(String type) {
-        mType = type;
-    }
-
-    public String getType() {
-        return mType;
     }
 
     public Search(Parcel in) {
@@ -90,20 +57,50 @@ public class Search implements Parcelable{
         mType = in.readString();
     }
 
+    public int getYear() {
+        return mYear;
+    }
+
+    public void setYear(int year) {
+        mYear = year;
+    }
+
+    public String getPoster() {
+        return mPoster;
+    }
+
+    public void setPoster(String poster) {
+        mPoster = poster;
+    }
+
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
+    public String getImdbID() {
+        return mImdbID;
+    }
+
+    public void setImdbID(String imdbID) {
+        mImdbID = imdbID;
+    }
+
+    public String getType() {
+        return mType;
+    }
+
+    public void setType(String type) {
+        mType = type;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<Search> CREATOR = new Creator<Search>() {
-        public Search createFromParcel(Parcel in) {
-            return new Search(in);
-        }
-
-        public Search[] newArray(int size) {
-            return new Search[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -115,7 +112,7 @@ public class Search implements Parcelable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "year = " + mYear + ", poster = " + mPoster + ", title = " + mTitle + ", imdbID = " + mImdbID + ", type = " + mType;
     }
 

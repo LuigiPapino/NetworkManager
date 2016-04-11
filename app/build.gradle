@@ -49,7 +49,6 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile project(':networkmanager')
 
-
     //AndroidAnnotations
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
@@ -63,7 +62,6 @@ dependencies {
 
     //GSON
     compile 'com.google.code.gson:gson:2.5'
-
 
     //UltimateRecyclerView
     compile 'com.hkm.slidingmenulib:libmenu:0.4.9'
@@ -85,7 +83,7 @@ dependencies {
     compile 'net.simonvt.schematic:schematic:0.6.4'
 
     //Fresco
-    compile ('com.facebook.fresco:fresco:0.9.0+'){ exclude module: 'bolts-android'}
+    compile('com.facebook.fresco:fresco:0.9.0+') { exclude module: 'bolts-android' }
 
     //LoganSquare
     apt 'com.bluelinelabs:logansquare-compiler:1.3.6'

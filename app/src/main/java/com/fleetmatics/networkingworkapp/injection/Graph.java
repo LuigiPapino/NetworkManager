@@ -2,8 +2,8 @@ package com.fleetmatics.networkingworkapp.injection;
 
 import android.app.Application;
 
-import com.fleetmatics.networkingworkapp.ui.MainActivity;
 import com.fleetmatics.networkingworkapp.MyApplication;
+import com.fleetmatics.networkingworkapp.ui.MainActivity;
 
 import javax.inject.Singleton;
 

@@ -20,9 +20,9 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         boolean isConnected = info != null &&
                 info.isConnectedOrConnecting();
 
-            NetworkRequestService_.intent(context)
-                    .onConnectionAvailable(isConnected)
-                    .start();
+        NetworkRequestService_.intent(context)
+                .onConnectionAvailable(isConnected)
+                .start();
 
 
     }

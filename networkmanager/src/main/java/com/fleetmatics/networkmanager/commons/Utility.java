@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-
 import com.fleetmatics.networkmanager.BuildConfig;
 
 import java.io.IOException;
@@ -26,11 +25,11 @@ public class Utility {
     }
 
 
-    public static Uri ResourceToUri (Context context, int resID) {
+    public static Uri ResourceToUri(Context context, int resID) {
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 context.getResources().getResourcePackageName(resID) + '/' +
                 context.getResources().getResourceTypeName(resID) + '/' +
-                context.getResources().getResourceEntryName(resID) );
+                context.getResources().getResourceEntryName(resID));
     }
 
     public static void copyFile(InputStream in, OutputStream out) throws IOException {

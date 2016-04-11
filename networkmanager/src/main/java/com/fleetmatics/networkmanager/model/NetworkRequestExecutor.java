@@ -10,11 +10,7 @@ import rx.Observable;
 /**
  * Created by luigi.papino on 06/04/16.
  */
-public abstract class  NetworkRequestExecutor<T, API> {
-
-      public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkApi<API> networkApi, @NonNull NetworkRequest request);
-      public abstract String getExecutableType();
-
+public abstract class NetworkRequestExecutor<T, API> {
 
     private static NetworkRequestExecutor instance;
 
@@ -22,7 +18,11 @@ public abstract class  NetworkRequestExecutor<T, API> {
         instance = this;
     }
 
-    public static NetworkRequestExecutor getInstance(){
+    public static NetworkRequestExecutor getInstance() {
         return instance;
     }
+
+    public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkApi<API> networkApi, @NonNull NetworkRequest request);
+
+    public abstract String getExecutableType();
 }

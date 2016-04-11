@@ -27,15 +27,6 @@ public class NetworkRequest implements Parcelable {
     private String type;
     private Map<String, String> params = new HashMap<>();
     private String uri;
-
-    public int getRetry() {
-        return retry;
-    }
-
-    public void setRetry(int retry) {
-        this.retry = retry;
-    }
-
     private int retry;
 
     public NetworkRequest() {
@@ -50,6 +41,14 @@ public class NetworkRequest implements Parcelable {
         for (int i = 0; i < size; i++) {
             params.put(in.readString(), in.readString());
         }
+    }
+
+    public int getRetry() {
+        return retry;
+    }
+
+    public void setRetry(int retry) {
+        this.retry = retry;
     }
 
     public String getType() {

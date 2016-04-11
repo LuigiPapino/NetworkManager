@@ -8,7 +8,8 @@ import net.simonvt.schematic.annotation.Table;
  */
 @Database(version = NetworkRequestsDataBase.VERSION)
 public final class NetworkRequestsDataBase {
-    public static final int VERSION =1;
+    public static final int VERSION = 1;
 
-    @Table(NetworkRequestsColumns.class) public static final String REQUESTS = "requests";
+    @Table(NetworkRequestsColumns.class)
+    public static final String REQUESTS = "requests";
 }

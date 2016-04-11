@@ -16,21 +16,7 @@ import rx.Observable;
 public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APIService> {
 
 
-
-    @Override
-    public  Observable<Response<ResponseSearch>> createNetworkRequestObservable(@NonNull NetworkApi<APIService> networkApi, @NonNull NetworkRequest request) {
-        return networkApi.getApiService()
-                .search(request.getParams().get("s"), request.getParams().get("page"))
-                ;
-    }
-
-
-    @Override
-    public String getExecutableType() {
-        return "GET_SEARCH";
-    }
-
-    public static NetworkRequest createRequest(String search, int page){
+    public static NetworkRequest createRequest(String search, int page) {
         NetworkRequest request = new NetworkRequest();
         request.setRetry(0);
         request.setType(SearchExecutor.getInstance().getExecutableType());
@@ -39,5 +25,17 @@ public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APISe
         request.generateUri(false);
 
         return request;
+    }
+
+    @Override
+    public Observable<Response<ResponseSearch>> createNetworkRequestObservable(@NonNull NetworkApi<APIService> networkApi, @NonNull NetworkRequest request) {
+        return networkApi.getApiService()
+                .search(request.getParams().get("s"), request.getParams().get("page"))
+                ;
+    }
+
+    @Override
+    public String getExecutableType() {
+        return "GET_SEARCH";
     }
 }

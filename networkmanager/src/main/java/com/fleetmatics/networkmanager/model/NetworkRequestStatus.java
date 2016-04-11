@@ -77,6 +77,7 @@ public class NetworkRequestStatus<T> {
     public boolean isWaitingConnection() {
         return status == Status.WAITING_CONNECTION;
     }
+
     public boolean isError() {
         return status == Status.ERROR_OTHER || status == Status.ERROR_SERVER;
     }

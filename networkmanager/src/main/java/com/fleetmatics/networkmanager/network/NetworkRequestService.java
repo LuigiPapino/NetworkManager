@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-
 import com.fleetmatics.networkmanager.commons.BaseIntentService;
 import com.fleetmatics.networkmanager.model.NetworkRequest;
 import com.fleetmatics.networkmanager.model.NetworkRequestExecutor;
@@ -38,11 +37,12 @@ public class NetworkRequestService extends BaseIntentService {
     }
 
     @AfterInject
-    void setup(){
+    void setup() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         isConnectionAvailable = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
     }
+
     @Override
     protected void onHandleIntent(Intent intent) {
         logD("onHandleIntent() called with: " + "intent = [" + intent + "]");

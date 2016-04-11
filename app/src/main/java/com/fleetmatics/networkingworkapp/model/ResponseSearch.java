@@ -3,6 +3,7 @@ package com.fleetmatics.networkingworkapp.model;
 /**
  * Created by luigi.papino on 08/04/16.
  */
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 @JsonObject
-public class ResponseSearch implements Parcelable{
+public class ResponseSearch implements Parcelable {
 
     public static final Creator<ResponseSearch> CREATOR = new Creator<ResponseSearch>() {
         public ResponseSearch createFromParcel(Parcel in) {
@@ -44,7 +45,7 @@ public class ResponseSearch implements Parcelable{
     private int mTotalResult;
     private String keyword;
 
-    public ResponseSearch(){
+    public ResponseSearch() {
 
     }
 
@@ -112,7 +113,7 @@ public class ResponseSearch implements Parcelable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "searches = " + mSearches + ", error = " + mError + ", response = " + mResponse + ", totalResult = " + mTotalResult;
     }
 

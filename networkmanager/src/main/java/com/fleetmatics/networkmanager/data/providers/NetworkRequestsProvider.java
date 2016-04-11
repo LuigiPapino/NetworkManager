@@ -25,7 +25,9 @@ public final class NetworkRequestsProvider {
         }
         return builder.build();
     }
-    @TableEndpoint(table = NetworkRequestsDataBase.REQUESTS) public static class NetworkRequests {
+
+    @TableEndpoint(table = NetworkRequestsDataBase.REQUESTS)
+    public static class NetworkRequests {
 
         @ContentUri(
                 path = NetworkRequestsDataBase.REQUESTS,
@@ -40,7 +42,7 @@ public final class NetworkRequestsProvider {
                 whereColumn = NetworkRequestsColumns._ID,
                 pathSegment = 1)
         public static Uri withId(long id) {
-            return buildUri(NetworkRequestsDataBase.REQUESTS , String.valueOf(id));
+            return buildUri(NetworkRequestsDataBase.REQUESTS, String.valueOf(id));
         }
     }
 }

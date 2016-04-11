@@ -13,7 +13,7 @@ import com.squareup.leakcanary.RefWatcher;
 /**
  * Created by nietzsche on 28/01/16.
  */
-public class MyApplication extends Application implements RefWatcherProvider{
+public class MyApplication extends Application implements RefWatcherProvider {
     private static final String TAG = MyApplication.class.getSimpleName();
     private static MyApplication instance;
 
@@ -38,7 +38,6 @@ public class MyApplication extends Application implements RefWatcherProvider{
     }
 
 
-
     public Graph getGraph() {
         return graph;
     }
@@ -47,11 +46,6 @@ public class MyApplication extends Application implements RefWatcherProvider{
     public RefWatcher getRefWatcher() {
         return refWatcher;
     }
-
-
-
-
-
 
 
 }

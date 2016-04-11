@@ -16,8 +16,6 @@ public class ViewWrapper<V extends View> extends RecyclerView.ViewHolder {
     }
 
 
-
-
     public V getView() {
         return view;
     }

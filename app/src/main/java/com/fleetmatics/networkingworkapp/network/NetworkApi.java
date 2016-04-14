@@ -1,9 +1,6 @@
-package com.fleetmatics.networkmanager.network;
+package com.fleetmatics.networkingworkapp.network;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.fleetmatics.networkmanager.BuildConfig;
 import com.github.aurae.retrofit2.LoganSquareConverterFactory;
@@ -22,30 +19,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class NetworkApi<API> {
     private static final String TAG = NetworkApi.class.getSimpleName();
-    private static NetworkApi instance;
     private final String BASE_PATH_API;
     public Retrofit retrofit;
     private API apiService;
     private Class<API> apiClass;
-    private Context context;
 
-    private NetworkApi(@NonNull Context context, @NonNull String basePath, @NonNull Class<API> apiClass) {
-        this.context = context.getApplicationContext();
+    public NetworkApi(@NonNull String basePath, @NonNull Class<API> apiClass) {
         this.BASE_PATH_API = basePath;
         this.apiClass = apiClass;
         construct();
     }
 
-    @Nullable
-    public static NetworkApi getInstance() {
-        return instance;
-    }
-
-    public static void init(@NonNull Context context, @NonNull String basePath, @NonNull Class apiClass) {
-        if (instance == null)
-            instance = new NetworkApi(context, basePath, apiClass);
-
-    }
 
     public API getApiService() {
         return apiService;
@@ -58,7 +42,6 @@ public class NetworkApi<API> {
 
 
         Interceptor requestInterceptor = chain -> {
-            Log.d(TAG, "NetworkApi() called with: " + "context = [" + context + "]");
 
             Request request = chain.request().newBuilder()
                     //.addHeader(WsseToken.HEADER_WSSE, wsseToken.getWsseHeader())
@@ -86,6 +69,7 @@ public class NetworkApi<API> {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build();
+
         apiService = retrofit.create(apiClass);
     }
 

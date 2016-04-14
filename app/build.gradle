@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "com.fleetmatics.networkingworkapp"
-        minSdkVersion 17
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -89,4 +89,10 @@ dependencies {
     apt 'com.bluelinelabs:logansquare-compiler:1.3.6'
     compile 'com.bluelinelabs:logansquare:1.3.6'
     compile "com.github.aurae.retrofit2:converter-logansquare:1.4.0"
+
+    //BLE
+    compile 'com.polidea.rxandroidble:rxandroidble:1.0.1'
+
+    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+
 }

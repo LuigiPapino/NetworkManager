@@ -7,7 +7,6 @@ import com.fleetmatics.networkingworkapp.model.ResponseSearch;
 import com.fleetmatics.networkmanager.model.NetworkRequest;
 import com.fleetmatics.networkmanager.model.NetworkRequestExecutor;
 import com.fleetmatics.networkmanager.model.NetworkRequestStatus;
-import com.fleetmatics.networkmanager.network.NetworkApi;
 
 import retrofit2.Response;
 import rx.Observable;
@@ -19,20 +18,22 @@ public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APISe
 
 
     private static final String TAG = SearchExecutor.class.getSimpleName();
+    private final NetworkApi<APIService> networkApi;
+
+    public SearchExecutor(NetworkApi<APIService> networkApi) {
+        this.networkApi = networkApi;
+    }
 
     public static NetworkRequest createRequest(String search, int page) {
-        NetworkRequest request = new NetworkRequest();
-        request.setRetry(0);
-        request.setType(SearchExecutor.getInstance().getExecutableType());
-        request.getParams().put("s", search);
-        request.getParams().put("page", String.valueOf(page));
-        request.generateUri(false);
-
+        NetworkRequest request = new NetworkRequest.Builder(getInstance(), false)
+                .putParam("s", search)
+                .putParam("page", String.valueOf(page))
+                .build();
         return request;
     }
 
     @Override
-    public Observable<Response<ResponseSearch>> createNetworkRequestObservable(@NonNull NetworkApi<APIService> networkApi, @NonNull NetworkRequest request) {
+    public Observable<Response<ResponseSearch>> createNetworkRequestObservable(@NonNull NetworkRequest request) {
         return networkApi.getApiService()
                 .search(request.getParams().get("s"), request.getParams().get("page"))
                 ;

@@ -1,6 +1,5 @@
 package com.fleetmatics.networkmanager.network;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -71,7 +70,7 @@ public class NetworkRequestService extends BaseIntentService {
         if (isConnectionAvailable) {
             NetworkRequestExecutor executor = NetworkRequestManager.Tools.getExecutor(request);
 
-            rx.Observable<Response> observable = executor.createNetworkRequestObservable((NetworkApi<DialogInterface.OnClickListener>) NetworkApi.getInstance(), request);
+            rx.Observable<Response> observable = executor.createNetworkRequestObservable(request);
 
             NetworkRequestManager.Notify.notifyRequestStatusOnGoing(request.hashCode());
             observable

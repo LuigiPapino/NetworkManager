@@ -2,6 +2,7 @@ package com.fleetmatics.networkmanager.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
@@ -124,7 +125,6 @@ public class NetworkRequest implements Parcelable {
 
     }
 
-
     /**
      * Generate and set the uri for this network request
      *
@@ -148,6 +148,38 @@ public class NetworkRequest implements Parcelable {
         return this.uri;
 
 
+    }
+
+    public static class Builder {
+
+        private String type;
+        private Map<String, String> params = new HashMap<>();
+        private boolean isWithTimestamp;
+        private int retry = 0;
+
+        public Builder(@NonNull NetworkRequestExecutor executor, boolean isWithTimestamp) {
+            type = executor.getExecutableType();
+            this.isWithTimestamp = isWithTimestamp;
+        }
+
+        public Builder putParam(@NonNull String key, @NonNull String value) {
+            params.put(key, value);
+            return this;
+        }
+
+        public Builder retry(int count) {
+            retry = count;
+            return this;
+        }
+
+        public NetworkRequest build() {
+            NetworkRequest request = new NetworkRequest();
+            request.setType(Builder.this.type);
+            request.setParams(Builder.this.params);
+            request.setRetry(Builder.this.retry);
+            request.generateUri(isWithTimestamp);
+            return request;
+        }
     }
 
 }

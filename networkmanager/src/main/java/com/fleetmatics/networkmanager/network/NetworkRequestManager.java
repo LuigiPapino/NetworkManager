@@ -48,14 +48,13 @@ public class NetworkRequestManager {
     }
 
     @NonNull
-    public static NetworkRequestManager init(@NonNull Context context, @NonNull String basePath, @NonNull Class apiClass) {
+    public static NetworkRequestManager init(@NonNull Context context) {
         if (context == null)
             throw new IllegalArgumentException("application can't be null");
 
         if (instance == null) {
             NetworkRequestsStoreFromProvider networkRequestsStore = new NetworkRequestsStoreFromProvider(context.getApplicationContext());
             instance = new NetworkRequestManager(context.getApplicationContext(), networkRequestsStore);
-            NetworkApi.init(context.getApplicationContext(), basePath, apiClass);
         }
         return instance;
 
@@ -92,7 +91,6 @@ public class NetworkRequestManager {
             NetworkRequest request = requestsStore.get(hashcode);
 
             if (!subject.hasObservers()) {
-                //TODO maybe a notification?
                 Tools.getExecutor(requestsStore.get(hashcode)).newStatusWithoutObserver(request, status);
 
 

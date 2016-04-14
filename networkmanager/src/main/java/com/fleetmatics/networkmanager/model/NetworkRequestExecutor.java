@@ -2,8 +2,6 @@ package com.fleetmatics.networkmanager.model;
 
 import android.support.annotation.NonNull;
 
-import com.fleetmatics.networkmanager.network.NetworkApi;
-
 import retrofit2.Response;
 import rx.Observable;
 
@@ -22,7 +20,7 @@ public abstract class NetworkRequestExecutor<T, API> {
         return instance;
     }
 
-    public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkApi<API> networkApi, @NonNull NetworkRequest request);
+    public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkRequest request);
 
     public abstract String getExecutableType();
 

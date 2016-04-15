@@ -8,7 +8,7 @@ import rx.Observable;
 /**
  * Created by luigi.papino on 06/04/16.
  */
-public abstract class NetworkRequestExecutor<T, API> {
+public abstract class NetworkRequestExecutor<T> {
 
     private static NetworkRequestExecutor instance;
 
@@ -24,5 +24,6 @@ public abstract class NetworkRequestExecutor<T, API> {
 
     public abstract String getExecutableType();
 
-    public abstract void newStatusWithoutObserver(NetworkRequest request, NetworkRequestStatus status);
+    public abstract void updatedStatus(NetworkRequest request, NetworkRequestStatus status, boolean hasObservers);
+
 }

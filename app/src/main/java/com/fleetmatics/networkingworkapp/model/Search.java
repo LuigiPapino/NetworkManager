@@ -9,8 +9,6 @@ import android.os.Parcelable;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
-import com.google.gson.annotations.SerializedName;
-
 
 @JsonObject
 public class Search implements Parcelable {
@@ -29,19 +27,14 @@ public class Search implements Parcelable {
     private static final String FIELD_TITLE = "Title";
     private static final String FIELD_IMDB_ID = "imdbID";
     private static final String FIELD_TYPE = "Type";
-    @SerializedName(FIELD_YEAR)
     @JsonField(name = FIELD_YEAR)
     private int mYear;
-    @SerializedName(FIELD_POSTER)
     @JsonField(name = FIELD_POSTER)
     private String mPoster;
-    @SerializedName(FIELD_TITLE)
     @JsonField(name = FIELD_TITLE)
     private String mTitle;
-    @SerializedName(FIELD_IMDB_ID)
     @JsonField(name = FIELD_IMDB_ID)
     private String mImdbID;
-    @SerializedName(FIELD_TYPE)
     @JsonField(name = FIELD_TYPE)
     private String mType;
 

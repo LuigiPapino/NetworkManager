@@ -56,9 +56,9 @@ public class NetworkRequestService extends BaseIntentService {
         if (isConnectionAvailable) {
             for (NetworkRequest request : NetworkRequestManager.getInstance().getRequestsStore().getAll()) {
                 if (!NetworkRequestManager.Tools.contains(request.hashCode())
-                        || NetworkRequestManager.Tools.isWaitingConnection(hashCode())
+                        || NetworkRequestManager.Tools.isWaitingConnection(request.hashCode())
                         )
-                    executeRequest(request);
+                    NetworkRequestManager.getInstance().executeRequest(request);
             }
         }
     }
@@ -87,6 +87,7 @@ public class NetworkRequestService extends BaseIntentService {
                                 NetworkRequestManager.Notify.notifyRequestStatusError(request.hashCode(), throwable.getMessage(), true);
                             }
                     );
+
         } else
             NetworkRequestManager.Notify.notifyRequestStatusWaitingConnection(request.hashCode());
 

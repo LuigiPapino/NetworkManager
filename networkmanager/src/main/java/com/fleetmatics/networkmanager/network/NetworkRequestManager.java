@@ -24,7 +24,6 @@ import rx.subjects.BehaviorSubject;
 /**
  * Created by luigi.papino on 06/04/16.
  */
-//TODO retry policy
 public class NetworkRequestManager {
 
     private static final String TAG = NetworkRequestManager.class.getSimpleName();
@@ -65,23 +64,27 @@ public class NetworkRequestManager {
     }
 
 
-
     public <T> Observable<NetworkRequestStatus<T>> executeRequest(@NonNull NetworkRequest request, Class<T> _class) {
-        if (!requestsMap.containsKey(request.hashCode()))
-            requestsMap.put(request.hashCode(), BehaviorSubject.create());
-
-        if (request.getRetry() > 1 && requestsStore.get(request.hashCode()) == null)
-            requestsStore.put(request);
-
-        NetworkRequestService_.intent(context)
-                .executeRequest(request)
-                .start();
+        executeRequest(request);
 
         BehaviorSubject<NetworkRequestStatus<T>> subject = (BehaviorSubject<NetworkRequestStatus<T>>) (Object) requestsMap.get(request.hashCode());
         return subject.asObservable();
     }
 
 
+    public void executeRequest(@NonNull NetworkRequest request) {
+        if (!requestsMap.containsKey(request.hashCode()))
+            requestsMap.put(request.hashCode(), BehaviorSubject.create());
+
+        if (requestsStore.get(request.hashCode()) == null)
+            requestsStore.put(request);
+
+        NetworkRequestService_.intent(context)
+                .executeRequest(request)
+                .start();
+
+
+    }
 
     public void notifyRequestStatus(int hashcode, NetworkRequestStatus status) {
         Utility.logD(TAG, "notifyRequestStatus() called with: " + "hashcode = [" + hashcode + "], status = [" + status + "]");
@@ -90,15 +93,15 @@ public class NetworkRequestManager {
             subject.onNext(status);
             NetworkRequest request = requestsStore.get(hashcode);
 
-            if (!subject.hasObservers()) {
-                Tools.getExecutor(requestsStore.get(hashcode)).newStatusWithoutObserver(request, status);
-
-
-                Utility.logD(TAG, String.format("NetworkRequest %s has not observer", request != null ? request.getUri() : hashcode));
-            }
+            Tools.getExecutor(requestsStore.get(hashcode)).updatedStatus(request, status, subject.hasObservers());
 
             if (status.isCompleted()) {
                 requestsMap.remove(hashcode).onCompleted();
+
+                requestsStore.delete(hashcode);
+                request.setRetry(request.getRetry() - 1);
+                if (request.getRetry() > 0)
+                    requestsStore.put(request);
             }
         }
     }
@@ -165,7 +168,6 @@ public class NetworkRequestManager {
          * @return
          */
         public static boolean isWaitingConnection(int hashCode) {
-
             if (getInstance().requestsMap.containsKey(hashCode) && getInstance().requestsMap.get(hashCode).hasValue()) {
                 return getInstance().requestsMap.get(hashCode).getValue().isWaitingConnection();
             } else

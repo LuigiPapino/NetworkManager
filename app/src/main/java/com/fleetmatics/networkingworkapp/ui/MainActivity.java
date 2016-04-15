@@ -1,6 +1,5 @@
 package com.fleetmatics.networkingworkapp.ui;
 
-import android.Manifest;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -9,7 +8,6 @@ import com.fleetmatics.networkingworkapp.R;
 import com.fleetmatics.networkingworkapp.model.ResponseSearch;
 import com.fleetmatics.networkingworkapp.network.SearchExecutor;
 import com.fleetmatics.networkmanager.network.NetworkRequestManager;
-import com.tbruyelle.rxpermissions.RxPermissions;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     NetworkRequestManager networkRequestManager;
     @Extra
     boolean hello;
+    Subscription subscription;
 
     public MainActivity() {
         MyApplication.getInstance().getGraph().inject(this);
@@ -39,15 +38,13 @@ public class MainActivity extends AppCompatActivity {
     void setup() {
         setSupportActionBar(toolbar);
 
-        RxPermissions.getInstance(this)
-                .request(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .subscribe();
-
     }
 
     @Click
     void fab() {
-        Subscription subscription = networkRequestManager.executeRequest(
+        if (subscription != null)
+            subscription.unsubscribe();
+        subscription = networkRequestManager.executeRequest(
                 SearchExecutor.createRequest("superman", 1), ResponseSearch.class
         )
                 .subscribe(
@@ -60,5 +57,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                 );
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (subscription != null)
+            subscription.unsubscribe();
     }
 }

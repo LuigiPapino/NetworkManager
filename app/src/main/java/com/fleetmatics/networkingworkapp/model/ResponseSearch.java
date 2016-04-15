@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +30,12 @@ public class ResponseSearch implements Parcelable {
     private static final String FIELD_ERROR = "Error";
     private static final String FIELD_RESPONSE = "Response";
     private static final String FIELD_TOTAL_RESULTS = "totalResults";
-    @SerializedName(FIELD_SEARCH)
     @JsonField(name = FIELD_SEARCH)
     private List<Search> mSearches;
-    @SerializedName(FIELD_ERROR)
     @JsonField(name = FIELD_ERROR)
     private String mError;
-    @SerializedName(FIELD_RESPONSE)
     @JsonField(name = FIELD_RESPONSE)
     private String mResponse;
-    @SerializedName(FIELD_TOTAL_RESULTS)
     @JsonField(name = FIELD_TOTAL_RESULTS)
     private int mTotalResult;
     private String keyword;

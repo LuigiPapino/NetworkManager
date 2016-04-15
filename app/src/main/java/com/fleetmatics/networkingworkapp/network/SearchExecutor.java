@@ -14,7 +14,7 @@ import rx.Observable;
 /**
  * Created by luigi.papino on 08/04/16.
  */
-public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APIService> {
+public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch> {
 
 
     private static final String TAG = SearchExecutor.class.getSimpleName();
@@ -25,11 +25,10 @@ public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APISe
     }
 
     public static NetworkRequest createRequest(String search, int page) {
-        NetworkRequest request = new NetworkRequest.Builder(getInstance(), false)
+        return new NetworkRequest.Builder(getInstance(), false)
                 .putParam("s", search)
                 .putParam("page", String.valueOf(page))
                 .build();
-        return request;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class SearchExecutor extends NetworkRequestExecutor<ResponseSearch, APISe
     }
 
     @Override
-    public void newStatusWithoutObserver(NetworkRequest request, NetworkRequestStatus status) {
-        Log.d(TAG, "newStatusWithoutObserver() called with: " + "request = [" + request + "], status = [" + status + "]");
+    public void updatedStatus(NetworkRequest request, NetworkRequestStatus status, boolean hasObservers) {
+        Log.d(TAG, "updatedStatus() called with: " + "request = [" + request + "], status = [" + status + "], hasObservers = [" + hasObservers + "]");
     }
 }

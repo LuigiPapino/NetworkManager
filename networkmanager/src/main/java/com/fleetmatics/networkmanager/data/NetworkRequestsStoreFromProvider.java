@@ -40,11 +40,13 @@ public class NetworkRequestsStoreFromProvider implements NetworkRequestsStore {
     @Override
     @NonNull
     public List<NetworkRequest> getAll() {
-        Log.d(TAG, "getAll() called with: " + "");
+
 
         Cursor cursor = getContentResolver().query(NetworkRequestsProvider.NetworkRequests.NETWORK_REQUESTS,
                 new String[]{NetworkRequestsColumns._ID, NetworkRequestsColumns.JSON}
                 , null, null, null);
+
+        Log.d(TAG, "getAll() called with: " + cursor.getCount());
 
         return cursorToList(cursor);
     }
@@ -72,6 +74,8 @@ public class NetworkRequestsStoreFromProvider implements NetworkRequestsStore {
             e.printStackTrace();
         }
         getContentResolver().insert(NetworkRequestsProvider.NetworkRequests.NETWORK_REQUESTS, values);
+
+
     }
 
     @Override

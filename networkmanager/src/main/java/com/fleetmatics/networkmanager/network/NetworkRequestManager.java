@@ -2,6 +2,7 @@ package com.fleetmatics.networkmanager.network;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.fleetmatics.networkmanager.commons.Utility;
 import com.fleetmatics.networkmanager.data.NetworkRequestsStore;
@@ -65,6 +66,7 @@ public class NetworkRequestManager {
 
 
     public <T> Observable<NetworkRequestStatus<T>> executeRequest(@NonNull NetworkRequest request, Class<T> _class) {
+        Log.d(TAG, "executeRequest() called with: " + "request = [" + request + "], _class = [" + _class + "]");
         executeRequest(request);
 
         BehaviorSubject<NetworkRequestStatus<T>> subject = (BehaviorSubject<NetworkRequestStatus<T>>) (Object) requestsMap.get(request.hashCode());

@@ -1,4 +1,10 @@
 <resources>
-    <string name="app_name">NetworkingWorkapp</string>
+    <string name="app_name">Customer App</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="username">User ID</string>
+    <string name="login">Login</string>
+    <string name="title_activity_job_map">Job Map</string>
+    <string name="title_activity_workers_map">Workers Map</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

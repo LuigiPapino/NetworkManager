@@ -1,10 +1,16 @@
 package com.fleetmatics.networkingworkapp.network;
 
 
-import com.fleetmatics.networkingworkapp.model.ResponseSearch;
+import com.fleetmatics.networkingworkapp.model.Job;
+import com.fleetmatics.networkingworkapp.model.JobList;
+import com.fleetmatics.networkingworkapp.model.WorkerLatLng;
+
+import java.util.List;
 
 import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -13,8 +19,19 @@ import rx.Observable;
  */
 public interface APIService {
 
-    @GET("?r=json&type=movie")
-    Observable<Response<ResponseSearch>> search(@Query("s") String search, @Query("page") String page);
+    @GET("jobs")
+    Observable<Response<JobList>> searchByCustomer(@Query("customerId") String customerId);
+
+    @GET("jobs")
+    Observable<Response<List<Job>>> searchByWorker(@Query("workerId") String workerId);
+
+    @PUT("customers/{customer_id}")
+    Observable<Response<String>> putToken(@Path("customer_id") String customerId, @Query("token") String token);
+
+    @GET("workers/{id}")
+    Observable<Response<WorkerLatLng>> getWorkerLocation(@Path("id") String WorkerId);
+
+
 
   /*  @GET("users/me")
     Observable<Response<User>> getMe();

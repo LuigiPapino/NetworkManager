@@ -10,15 +10,8 @@ import rx.Observable;
  */
 public abstract class NetworkRequestExecutor<T> {
 
-    private static NetworkRequestExecutor instance;
 
-    public NetworkRequestExecutor() {
-        instance = this;
-    }
 
-    public static NetworkRequestExecutor getInstance() {
-        return instance;
-    }
 
     public abstract Observable<Response<T>> createNetworkRequestObservable(@NonNull NetworkRequest request);
 

@@ -37,14 +37,13 @@ public class NetworkApi<API> {
     private void construct() {
 
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
-        logInterceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
+        logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
 
         Interceptor requestInterceptor = chain -> {
 
             Request request = chain.request().newBuilder()
                     //.addHeader(WsseToken.HEADER_WSSE, wsseToken.getWsseHeader())
-
                     .build();
             HttpUrl.Builder urlBuilder = request.url().newBuilder();
             if (BuildConfig.DEBUG)

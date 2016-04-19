@@ -63,8 +63,8 @@ public class NetworkRequestsStoreFromProvider implements NetworkRequestsStore {
     }
 
     @Override
-    public void put(@Nullable NetworkRequest request) {
-        if (request == null)
+    public synchronized void put(@Nullable NetworkRequest request) {
+        if (request == null || get(request.hashCode()) != null)
             return;
         ContentValues values = new ContentValues();
         try {

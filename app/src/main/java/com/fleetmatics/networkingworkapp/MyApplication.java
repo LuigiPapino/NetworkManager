@@ -90,10 +90,10 @@ public class MyApplication extends MultiDexApplication implements RefWatcherProv
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher);
-        if (bundle.getInt("type") == 0) {
+        if (bundle.getString("type").contentEquals("0")) {
             mBuilder.setContentTitle(bundle.getString("jobTitle"))
-                    .setContentText("New Status: " + JobStatus.values()[bundle.getInt("value")].toString());
-        } else if (bundle.getInt("type") == 1) {
+                    .setContentText("New Status: " + JobStatus.values()[Integer.valueOf(bundle.getString("value"))].toString());
+        } else if (bundle.getString("type").contentEquals("1")) {
             mBuilder.setContentTitle(bundle.getString("workerName"))
                     .setContentText("is in late " + bundle.getString("value"));
         }

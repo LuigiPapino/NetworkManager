@@ -65,7 +65,7 @@ public class NetworkRequestManager {
     }
 
 
-    public <T> Observable<NetworkRequestStatus<T>> executeRequest(@NonNull NetworkRequest request, Class<T> _class) {
+    public synchronized <T> Observable<NetworkRequestStatus<T>> executeRequest(@NonNull NetworkRequest request, Class<T> _class) {
         Log.d(TAG, "executeRequest() called with: " + "request = [" + request + "], _class = [" + _class + "]");
         executeRequest(request);
 
@@ -74,7 +74,7 @@ public class NetworkRequestManager {
     }
 
 
-    public void executeRequest(@NonNull NetworkRequest request) {
+    public synchronized void executeRequest(@NonNull NetworkRequest request) {
         if (!requestsMap.containsKey(request.hashCode()))
             requestsMap.put(request.hashCode(), BehaviorSubject.create());
 

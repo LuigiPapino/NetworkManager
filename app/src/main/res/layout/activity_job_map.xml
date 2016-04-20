@@ -29,4 +29,20 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/inlate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/eta"
+        android:layout_centerHorizontal="true"
+        android:background="#80e51c23"
+        android:elevation="8dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="IN LATE"
+        android:textColor="@color/md_white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
 </RelativeLayout>

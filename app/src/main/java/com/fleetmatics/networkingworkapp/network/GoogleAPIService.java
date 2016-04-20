@@ -11,6 +11,6 @@ import rx.Observable;
 public interface GoogleAPIService {
 
 
-    @GET("json?key=AIzaSyBQWh_OR7NgiKOWfnPRwktqpMfxk93CzBM")
+    @GET("json?key=AIzaSyAVMG5X4o4Z9teye9dLK3BRGF0DLReN2MY")
     Observable<com.google.gson.JsonObject> getPath(@Query("origin") String origin, @Query("destination") String destination, @Query("arrival_time") long arrivalTime);
 }

@@ -1,8 +1,10 @@
 package com.fleetmatics.networkingworkapp.ui.job_map;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.fleetmatics.networkingworkapp.MyApplication;
@@ -52,12 +54,14 @@ public class JobMapActivity extends AppCompatActivity implements OnMapReadyCallb
     @Inject
     MapsNetworkApi<GoogleAPIService> mapsNetworkApi;
     @ViewById
-    TextView eta;
+    TextView eta, inlate;
+
     NetworkRequestManager networkRequestManager = NetworkRequestManager.getInstance();
     LatLng destinationLatLng;
     Marker workerMarker;
     Subscription subscription;
     private GoogleMap mMap;
+    private Subscription subscription2;
 
     @OptionsItem(android.R.id.home)
     void onUp() {
@@ -73,6 +77,17 @@ public class JobMapActivity extends AppCompatActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        subscription2 = MyApplication.getInstance().getGCMObserver()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bundle -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(JobMapActivity.this);
+                    if (bundle.getString("type").contentEquals("0")) {
+
+                    } else if (bundle.getString("type").contentEquals("1")) {
+                        inlate.setVisibility(View.VISIBLE);
+                    }
+                });
     }
 
     /**
@@ -201,6 +216,8 @@ public class JobMapActivity extends AppCompatActivity implements OnMapReadyCallb
         if (subscription != null)
             subscription.unsubscribe();
 
+        if (subscription2 != null)
+            subscription2.unsubscribe();
         super.onDestroy();
     }
 }
